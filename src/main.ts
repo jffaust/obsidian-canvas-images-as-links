@@ -80,7 +80,7 @@ export default class CanvasImageLinkPlugin extends Plugin {
 }
 
 function isValidNodeType(node: any): boolean {
-	return node?.unknownData?.type === "file";
+	return node?.unknownData?.type === "file" || "file" in node;
 }
 
 function getNodeLink(node: any): string {

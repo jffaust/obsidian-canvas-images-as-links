@@ -1,21 +1,5 @@
-import {
-	App,
-	ItemView,
-	Modal,
-	Plugin,
-	Setting,
-	TFile,
-	WorkspaceLeaf,
-} from "obsidian";
+import { App, ItemView, Modal, Plugin, Setting } from "obsidian";
 import { CanvasNode } from "obsidian-typings";
-
-interface CanvasNodeData {
-	id: string;
-	type: string;
-	file?: string;
-	link?: string;
-	[key: string]: any;
-}
 
 export default class CanvasImageLinkPlugin extends Plugin {
 	async onload() {
@@ -78,7 +62,7 @@ export default class CanvasImageLinkPlugin extends Plugin {
 		}
 	}
 
-	getSelectedCanvasNode(): CanvasNodeData | null {
+	getSelectedCanvasNode(): any | null {
 		const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 		if (canvasView?.getViewType() === "canvas") {
 			const canvas = (canvasView as any).canvas;
@@ -88,18 +72,18 @@ export default class CanvasImageLinkPlugin extends Plugin {
 			if (selection.length !== 1) {
 				return null;
 			}
-			const node = selection[0] as CanvasNodeData;
+			const node = selection[0];
 			return node;
 		}
 		return null;
 	}
 }
 
-function isValidNodeType(node: CanvasNodeData): boolean {
-	return node.unknownData.type === "file";
+function isValidNodeType(node: any): boolean {
+	return node?.unknownData?.type === "file";
 }
 
-function getNodeLink(node: CanvasNodeData): string {
+function getNodeLink(node: any): string {
 	if ("unknownData" in node) {
 		if ("link" in node.unknownData) {
 			return node.unknownData.link;
@@ -109,7 +93,7 @@ function getNodeLink(node: CanvasNodeData): string {
 }
 
 class SampleModal extends Modal {
-	constructor(app: App, node: CanvasNode) {
+	constructor(app: App, node: any) {
 		super(app);
 		this.setTitle("Set node link");
 		this.modalEl.addClass("canvas-node-link-modal");

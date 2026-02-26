@@ -3,9 +3,9 @@
 	"name": "Canvas Image Links",
 	"version": "0.1.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
+	"description": "Allows setting a link on canvas images",
 	"author": "jffaust",
 	"authorUrl": "https://github.com/jffaust",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"fundingUrl": "https://ko-fi.com/jffaust",
 	"isDesktopOnly": false
 }

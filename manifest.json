@@ -1,9 +1,9 @@
 {
 	"id": "obsidian-canvas-image-links",
 	"name": "Canvas Image Links",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"minAppVersion": "0.15.0",
-	"description": "Allows setting a link on canvas images",
+	"description": "Allows setting a link on canvas images.",
 	"author": "jffaust",
 	"authorUrl": "https://github.com/jffaust",
 	"fundingUrl": "https://ko-fi.com/jffaust",

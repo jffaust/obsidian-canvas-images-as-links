@@ -1,12 +1,8 @@
-# Obsidian Canvas Image Links
+# Obsidian Canvas Images As Links
 
 Adds the ability to set a link on images in Obsidian Canvas. You can then double click on the image to open the link.
 
-
-
 https://github.com/user-attachments/assets/388c6279-040b-47ca-8a6b-ac6692dd1481
-
-
 
 ## Features
 
@@ -20,7 +16,3 @@ https://github.com/user-attachments/assets/388c6279-040b-47ca-8a6b-ac6692dd1481
 ## Manually installing the plugin
 
 - Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Future Improvements
-
-- Show the link next to the node name (if the label is visible via Obsidian Canvas core setting)

@@ -1,5 +1,24 @@
 import { App, ItemView, Modal, Plugin, Setting } from "obsidian";
-import { CanvasNode } from "obsidian-typings";
+
+interface NodeUnknownData {
+	type?: string;
+	link?: string;
+}
+
+interface CanvasNodeData {
+	containerEl: HTMLElement;
+	unknownData: NodeUnknownData;
+	setData(data: Partial<NodeUnknownData>): void;
+}
+
+interface CanvasData {
+	nodes: Map<string, CanvasNodeData>;
+	selection: Set<CanvasNodeData>;
+}
+
+interface CanvasViewData extends ItemView {
+	canvas: CanvasData;
+}
 
 export default class CanvasImageLinkPlugin extends Plugin {
 	async onload() {
@@ -12,16 +31,16 @@ export default class CanvasImageLinkPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on("layout-change", () => {
-				console.log(
+				console.debug(
 					"Layout changed, updating canvas node indicators...",
 				);
 				const canvasView = this.app.workspace.getLeavesOfType(
 					"canvas",
-				)[0]?.view as any;
+				)[0]?.view as CanvasViewData | undefined;
 				if (!canvasView) return;
 
 				const canvas = canvasView.canvas;
-				canvas.nodes.forEach((node: any) => {
+				canvas.nodes.forEach((node: CanvasNodeData) => {
 					updateCanvasNodeLinkLabel(node);
 				});
 			}),
@@ -79,10 +98,10 @@ export default class CanvasImageLinkPlugin extends Plugin {
 		}
 	}
 
-	getSelectedCanvasNode(): any | null {
+	getSelectedCanvasNode(): CanvasNodeData | null {
 		const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 		if (canvasView?.getViewType() === "canvas") {
-			const canvas = (canvasView as any).canvas;
+			const canvas = (canvasView as CanvasViewData).canvas;
 			// Get all currently selected nodes
 			const selection = Array.from(canvas.selection);
 
@@ -90,13 +109,13 @@ export default class CanvasImageLinkPlugin extends Plugin {
 				return null;
 			}
 			const node = selection[0];
-			return node;
+			return node || null;
 		}
 		return null;
 	}
 }
 
-function updateCanvasNodeLinkLabel(node: any, link?: string) {
+function updateCanvasNodeLinkLabel(node: CanvasNodeData, link?: string) {
 	if (!link) {
 		link = getNodeLink(node);
 	}
@@ -104,8 +123,9 @@ function updateCanvasNodeLinkLabel(node: any, link?: string) {
 	if (!node.containerEl) return;
 
 	const nodeEl = node.containerEl.parentElement;
+	if (!nodeEl) return;
 
-	let indicatorEl = nodeEl.querySelector(".canvas-link-label");
+	let indicatorEl = nodeEl.querySelector<HTMLElement>(".canvas-link-label");
 
 	if (indicatorEl && (!link || link === "")) {
 		indicatorEl.remove();
@@ -120,24 +140,28 @@ function updateCanvasNodeLinkLabel(node: any, link?: string) {
 	indicatorEl.setText(link); // Or an icon/shortened URL
 
 	// Style it to appear at the bottom
-	indicatorEl.style.position = "absolute";
-	indicatorEl.style.bottom = "-25px";
-	indicatorEl.style.left = "0%";
-	indicatorEl.style.fontSize = "var(--font-ui-medium)";
-	indicatorEl.style.color = "var(--canvas-card-label-color)";
-	indicatorEl.style.transform = "scale(var(--zoom-multiplier))";
-	indicatorEl.style.transformOrigin = "bottom left";
-	indicatorEl.style.whiteSpace = "nowrap";
+	Object.assign(indicatorEl.style, {
+		position: "absolute",
+		bottom: "-25px",
+		left: "0%",
+		fontSize: "var(--font-ui-medium)",
+		color: "var(--canvas-card-label-color)",
+		transform: "scale(var(--zoom-multiplier))",
+		transformOrigin: "bottom left",
+		whiteSpace: "nowrap",
+	});
 }
 
-function isValidNodeType(node: any): boolean {
-	return node?.unknownData?.type === "file" || "file" in node;
+function isValidNodeType(node: unknown): node is CanvasNodeData {
+	if (!node || typeof node !== "object") return false;
+	const n = node as CanvasNodeData;
+	return n.unknownData?.type === "file" || "file" in n;
 }
 
-function getNodeLink(node: any): string {
+function getNodeLink(node: CanvasNodeData): string {
 	if ("unknownData" in node) {
 		if ("link" in node.unknownData) {
-			return node.unknownData.link;
+			return node.unknownData.link || "";
 		}
 	}
 	return "";
@@ -151,7 +175,7 @@ function sanitizeLink(link: string): string {
 }
 
 class EditLinkModal extends Modal {
-	constructor(app: App, node: any) {
+	constructor(app: App, node: CanvasNodeData) {
 		super(app);
 		this.setTitle("Set node link");
 		this.modalEl.addClass("canvas-node-link-modal");

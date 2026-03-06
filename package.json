@@ -17,7 +17,7 @@
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/parser": "^8.56.1",
 		"esbuild": "0.25.5",
-		"eslint": "^10.0.2",
+		"eslint": "^9.21.0",
 		"eslint-plugin-obsidianmd": "0.1.9",
 		"globals": "14.0.0",
 		"jiti": "2.6.1",

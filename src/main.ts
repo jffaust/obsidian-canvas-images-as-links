@@ -21,7 +21,7 @@ interface CanvasViewData extends ItemView {
 }
 
 export default class CanvasImageLinkPlugin extends Plugin {
-	async onload() {
+	onload() {
 		// Register the double-click event on the window to capture clicks in the canvas
 		this.registerDomEvent(
 			window,

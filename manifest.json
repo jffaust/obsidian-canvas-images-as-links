@@ -1,7 +1,7 @@
 {
-	"id": "canvas-image-links",
-	"name": "Canvas Image Links",
-	"version": "0.1.5",
+	"id": "canvas-images-as-links",
+	"name": "Canvas Images As Links",
+	"version": "0.1.6",
 	"minAppVersion": "0.15.0",
 	"description": "Add links to canvas images and open them by double clicking. Links can be an vault URL, web URL or even a file on your computer.",
 	"author": "jffaust",

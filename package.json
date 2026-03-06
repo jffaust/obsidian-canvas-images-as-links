@@ -1,6 +1,6 @@
 {
-	"name": "canvas-image-links",
-	"version": "0.1.4",
+	"name": "obsidian-canvas-images-as-links",
+	"version": "0.1.6",
 	"description": "Add links to canvas images and open them by double clicking. Links can be an vault URL, web URL or even a file on your computer.",
 	"main": "main.js",
 	"type": "module",
